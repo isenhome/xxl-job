@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * job trigger thread pool helper
@@ -19,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class JobTriggerPoolHelper {
     private static Logger logger = LoggerFactory.getLogger(JobTriggerPoolHelper.class);
+    private static Pattern pattern = Pattern.compile("\\{\\{([y Y m M s S H h d \\s : -]+)\\}\\}");
 
 
     // ---------------------- trigger pool ----------------------
@@ -149,7 +152,13 @@ public class JobTriggerPoolHelper {
         } else {
             if (XxlJobAdminConfig.getAdminConfig().getXxlJobService().check(jobInfo)) {
                 LocalCacheUtil.set("job:" + jobId, jobInfo, 1000 * 60 * 60 * 1);
-                executorParam = executorParam.replace("{jobTime}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(jobInfo.getJobTime()));
+                Matcher m = pattern.matcher(executorParam);
+                while (m.find()) {
+                    String format = m.group(1);
+                    String time = new SimpleDateFormat(format).format(jobInfo.getJobTime());
+                    executorParam = executorParam.replace("{{" + format + "}}", time);
+                }
+//                executorParam = executorParam.replace("{jobTime}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(jobInfo.getJobTime()));
                 helper.addTrigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
             }
         }

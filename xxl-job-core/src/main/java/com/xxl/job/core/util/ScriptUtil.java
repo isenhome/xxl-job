@@ -1,6 +1,7 @@
 package com.xxl.job.core.util;
 
 import com.xxl.job.core.context.XxlJobHelper;
+import org.springframework.util.StringUtils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -67,12 +68,22 @@ public class ScriptUtil {
             if (command.equals("go")) {
                 cmdarray.add("run");
             }
-            cmdarray.add(scriptFile);
-            if (params != null && params.length > 0) {
-                for (String param : params) {
-                    cmdarray.add(param);
+            if(command.equals("datax")){
+                if (params != null && params.length > 0) {
+                    if(StringUtils.hasText(params[0])){
+                        cmdarray.add(params[0]);
+                    }
+                }
+                cmdarray.add(scriptFile);
+            }else{
+                cmdarray.add(scriptFile);
+                if (params != null && params.length > 0) {
+                    for (String param : params) {
+                        cmdarray.add(param);
+                    }
                 }
             }
+
             String[] cmdarrayFinal = cmdarray.toArray(new String[cmdarray.size()]);
 
             // process-exec

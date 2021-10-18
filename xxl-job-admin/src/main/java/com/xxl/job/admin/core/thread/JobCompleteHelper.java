@@ -164,10 +164,11 @@ public class JobCompleteHelper {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "log repeate callback.");     // avoid repeat callback, trigger child job etc
         }
 
+        int jobId = log.getJobId();
+        LocalCacheUtil.remove("job:" + jobId);
+
         if (handleCallbackParam.getHandleCode() == 0 || handleCallbackParam.getHandleCode() == 200) {
-            int jobId = log.getJobId();
             XxlJobAdminConfig.getAdminConfig().getXxlJobInfoDao().success(jobId);
-            LocalCacheUtil.remove("job:" + jobId);
         }
 
         // handle msg
