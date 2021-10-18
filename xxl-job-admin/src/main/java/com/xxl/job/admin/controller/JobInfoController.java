@@ -164,8 +164,11 @@ public class JobInfoController {
             executorParam = "";
         }
 
-        JobTriggerPoolHelper.trigger(id, TriggerTypeEnum.MANUAL, -1, null, executorParam, addressList);
-        return ReturnT.SUCCESS;
+        boolean result = JobTriggerPoolHelper.trigger(id, TriggerTypeEnum.MANUAL, -1, null, executorParam, addressList);
+        if (result) {
+            return ReturnT.SUCCESS;
+        }
+        return ReturnT.FAIL;
     }
 
     @RequestMapping("/nextTriggerTime")

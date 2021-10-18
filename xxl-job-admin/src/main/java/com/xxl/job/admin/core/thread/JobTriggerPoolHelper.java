@@ -145,10 +145,12 @@ public class JobTriggerPoolHelper {
      * @param executorParam         null: use job param
      *                              not null: cover job param
      */
-    public static void trigger(int jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam, String executorParam, String addressList) {
+    public static boolean trigger(int jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam, String executorParam, String addressList) {
+
         XxlJobInfo jobInfo = XxlJobAdminConfig.getAdminConfig().getXxlJobInfoDao().loadById(jobId);
         if (jobInfo.getJobCheck() == 0) {
             helper.addTrigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
+            return true;
         } else {
             if (XxlJobAdminConfig.getAdminConfig().getXxlJobService().check(jobInfo)) {
                 LocalCacheUtil.set("job:" + jobId, jobInfo, 1000 * 60 * 60 * 1);
@@ -160,7 +162,9 @@ public class JobTriggerPoolHelper {
                 }
 //                executorParam = executorParam.replace("{jobTime}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(jobInfo.getJobTime()));
                 helper.addTrigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
+                return true;
             }
+            return false;
         }
     }
 
