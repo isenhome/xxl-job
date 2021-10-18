@@ -82,7 +82,7 @@ public class ScriptJobHandler extends IJobHandler {
 
         if (exitValue == 0) {
             XxlJobHelper.handleSuccess();
-            return;
+            return ;
         } else {
             XxlJobHelper.handleFail("script exit value("+exitValue+") is failed");
             return ;

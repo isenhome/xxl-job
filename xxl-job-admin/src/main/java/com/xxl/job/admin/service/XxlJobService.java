@@ -28,6 +28,13 @@ public interface XxlJobService {
 	public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author);
 
 	/**
+	 * 查看job是否可执行
+	 * @param jobInfo
+	 * @return
+	 */
+	public boolean check(XxlJobInfo jobInfo);
+
+	/**
 	 * add job
 	 *
 	 * @param jobInfo

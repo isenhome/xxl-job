@@ -19,6 +19,11 @@
 		<result column="schedule_conf" property="scheduleConf" />
 		<result column="misfire_strategy" property="misfireStrategy" />
 
+		<result column="job_check" property="jobCheck" />
+		<result column="job_time" property="jobTime" />
+		<result column="timespan" property="timespan" />
+		<result column="depend" property="depend" />
+
 		<result column="executor_route_strategy" property="executorRouteStrategy" />
 		<result column="executor_handler" property="executorHandler" />
 	    <result column="executor_param" property="executorParam" />
@@ -49,6 +54,10 @@
 		t.schedule_type,
 		t.schedule_conf,
 		t.misfire_strategy,
+		t.job_check,
+		t.job_time,
+		t.timespan,
+		t.depend,
 		t.executor_route_strategy,
 		t.executor_handler,
 		t.executor_param,
@@ -122,6 +131,10 @@
 			schedule_type,
 			schedule_conf,
 			misfire_strategy,
+		    job_check,
+			job_time,
+			timespan,
+			depend,
             executor_route_strategy,
 			executor_handler,
 			executor_param,
@@ -146,6 +159,10 @@
 			#{scheduleType},
 			#{scheduleConf},
 			#{misfireStrategy},
+			#{jobCheck},
+			#{jobTime},
+			#{timespan},
+			#{depend},
 			#{executorRouteStrategy},
 			#{executorHandler},
 			#{executorParam},
@@ -184,6 +201,10 @@
 			schedule_type = #{scheduleType},
 			schedule_conf = #{scheduleConf},
 			misfire_strategy = #{misfireStrategy},
+			job_check = #{jobCheck},
+			job_time = #{jobTime},
+			timespan = #{timespan},
+			depend = #{depend},
 			executor_route_strategy = #{executorRouteStrategy},
 			executor_handler = #{executorHandler},
 			executor_param = #{executorParam},
@@ -199,6 +220,12 @@
 			trigger_last_time = #{triggerLastTime},
 			trigger_next_time = #{triggerNextTime}
 		WHERE id = #{id}
+	</update>
+
+	<update id="success" parameterType="java.util.HashMap">
+		update xxl_job_info
+		set job_time = DATE_ADD(job_time,INTERVAL timespan second)
+		where id = #{id} and job_check > 0
 	</update>
 
 	<delete id="delete" parameterType="java.util.HashMap">
@@ -231,6 +258,7 @@
 	<update id="scheduleUpdate" parameterType="com.xxl.job.admin.core.model.XxlJobInfo"  >
 		UPDATE xxl_job_info
 		SET
+			job_time = #{jobTime},
 			trigger_last_time = #{triggerLastTime},
 			trigger_next_time = #{triggerNextTime},
 			trigger_status = #{triggerStatus}

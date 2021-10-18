@@ -1,5 +1,8 @@
 package com.xxl.job.admin.core.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -23,6 +26,28 @@ public class XxlJobInfo {
 	private String scheduleType;			// 调度类型
 	private String scheduleConf;			// 调度配置，值含义取决于调度类型
 	private String misfireStrategy;			// 调度过期策略
+
+	/**
+	 * 是否启用周期限制
+	 */
+	private int jobCheck;
+
+	/**
+	 * 任务时间
+	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
+	private Date jobTime;
+
+	/**
+	 * 间隔
+	 */
+	private Integer timespan;
+
+	/**
+	 * 上级任务
+	 */
+	private String depend;
 
 	private String executorRouteStrategy;	// 执行器路由策略
 	private String executorHandler;		    // 执行器，任务Handler名称
@@ -121,6 +146,38 @@ public class XxlJobInfo {
 
 	public void setMisfireStrategy(String misfireStrategy) {
 		this.misfireStrategy = misfireStrategy;
+	}
+
+	public int getJobCheck() {
+		return jobCheck;
+	}
+
+	public void setJobCheck(int jobCheck) {
+		this.jobCheck = jobCheck;
+	}
+
+	public Date getJobTime() {
+		return jobTime;
+	}
+
+	public void setJobTime(Date jobTime) {
+		this.jobTime = jobTime;
+	}
+
+	public Integer getTimespan() {
+		return timespan;
+	}
+
+	public void setTimespan(Integer timespan) {
+		this.timespan = timespan;
+	}
+
+	public String getDepend() {
+		return depend;
+	}
+
+	public void setDepend(String depend) {
+		this.depend = depend;
 	}
 
 	public String getExecutorRouteStrategy() {
