@@ -136,8 +136,9 @@ public class JobInfoController {
 
     @RequestMapping("/running/list")
     @ResponseBody
-    public ReturnT<Set<String>> running(int id) {
+    public ReturnT<Set<String>> running() {
         Set<String> set = LocalCacheUtil.list();
+
         return new ReturnT<Set<String>>(set);
     }
 
